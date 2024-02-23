@@ -18,6 +18,23 @@ public class MainActivity extends AppCompatActivity {
     private int preCount = 0; // вспомогательный счётчик количества предыдущего поколения количества микрофлоры
 
     @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        int localCount = savedInstanceState.getInt("Fibonacci");
+        int localPreData = savedInstanceState.getInt("preData");
+        output.setText("" + localCount);
+        count = localCount;
+        preCount = localPreData;
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle saveInstanceState) {
+        super.onSaveInstanceState(saveInstanceState);
+        saveInstanceState.putInt("preData", preCount);
+        saveInstanceState.putInt("Fibonacci", count);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         Toast.makeText(this, "Старт активности", Toast.LENGTH_SHORT).show();
@@ -33,12 +50,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         Toast.makeText(this, "Активность не доступна для взаимодействия", Toast.LENGTH_SHORT).show();
+        //System.out.println(preCount);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         Toast.makeText(this, "Активность остановлена и пропала с экрана", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -84,19 +103,6 @@ public class MainActivity extends AppCompatActivity {
             preCount = pre; // переинициализации счётчика популяции предыдущего поколения
         }
         return count;
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        int local = savedInstanceState.getInt("Fibonacci");
-        output.setText("" + local);
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle saveInstanceState) {
-        super.onSaveInstanceState(saveInstanceState);
-        saveInstanceState.putInt("Fibonacci", count);
     }
 
 }
